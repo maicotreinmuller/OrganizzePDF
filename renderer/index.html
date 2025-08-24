@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORGANIZZE PDF</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self';">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+    <div class="header">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    </div>
+
+    <div class="sidebar">
+        <h3>Arquivos carregados</h3>
+        <div id="filesList">
+            <div class="sidebar-item">
+                Nenhum arquivo carregado
+            </div>
+        </div>
+        <button class="organize-btn" onclick="saveAsPDF()" id="saveBtn" disabled>
+            BAIXAR PDF ORGANIZADO
+        </button>
+    </div>
+
+    <div class="main-container">
+        <!-- Lista de Páginas (Modo Lista) -->
+        <div class="pages-list active" id="pagesList">
+            <div class="drop-zone">
+                <div class="file-icon">📄</div>
+                <p><strong>Arraste arquivos PDF ou imagens aqui</strong></p>
+                <p>ou use "Arquivo > Abrir" para começar</p>
+            </div>
+        </div>
+
+        <!-- Grid de Páginas (Modo Blocos) -->
+        <div class="pages-grid" id="pagesGrid">
+            <div class="drop-zone">
+                <div class="file-icon">📄</div>
+                <p><strong>Arraste arquivos PDF ou imagens aqui</strong></p>
+                <p>ou use "Arquivo > Abrir" para começar</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-message" id="loadingMessage">Iniciando processamento...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="rotatePage()">
+            Girar 90°
+        </div>
+        <div class="context-menu-item" onclick="duplicatePage()">
+            Duplicar
+        </div>
+        <div class="context-menu-item" onclick="showMoveToModal()">
+            Mover para...
+        </div>
+        <div class="context-menu-item" onclick="showPreviewModal()">
+            Visualizar
+        </div>
+        <div class="context-menu-item" onclick="confirmDeletePage()">
+            Excluir
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Exclusão</h3>
+                <button class="modal-close" onclick="hideModal('deleteModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Tem certeza que deseja excluir as páginas selecionadas?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('deleteModal')">Cancelar</button>
+                <button class="btn btn-danger" onclick="executeDelete()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Mover Para -->
+    <div class="modal-overlay" id="moveToModal">
+        <div class="modal" style="width: 600px; max-width: 90vw;">
+            <div class="modal-header">
+                <h3 class="modal-title">Mover Páginas</h3>
+                <button class="modal-close" onclick="hideModal('moveToModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="position-input-group">
+                    <span class="position-label">Nova posição:</span>
+                    <input type="number" class="position-input" id="movePosition" min="1" placeholder="Digite a posição...">
+                    <span class="position-label">de <span id="maxPosition">1</span></span>
+                </div>
+                
+                <h4 style="margin-bottom: 16px; font-size: 16px; color: var(--text-primary);">Páginas selecionadas:</h4>
+                <div class="move-pages-list" id="movePagesList">
+                    <!-- Lista será preenchida dinamicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('moveToModal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="executeMove()">Mover</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Visualizar Página</h3>
+                <button class="modal-close" onclick="hideModal('previewModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <img id="previewImage" class="preview-image" src="" alt="Prévia da página">
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.bmp,.tiff,.tif" onchange="handleFileSelect(event)">
+
+    <script src="app.js"></script>
+</body>
+</html>
