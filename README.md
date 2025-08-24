@@ -1,4 +1,4 @@
-# Organizze PDF - Aplicativo Desktop para Windows
+# Organizze PDF
 
 ## Descrição
 Aplicação de desktop para Windows, criada com Electron, para organizar e manipular arquivos PDF e imagens de forma simples e eficiente.
