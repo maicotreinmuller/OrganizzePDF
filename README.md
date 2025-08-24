@@ -9,7 +9,7 @@ Aplicação de desktop para Windows, criada com Electron, para organizar e manip
 - **Carregar múltiplos arquivos**: PDFs e imagens (JPG, PNG, BMP, TIFF)
 - **Visualização dual**: Modo lista e modo blocos com thumbnails
 - **Manipulação de páginas**: Girar, duplicar, mover, excluir
-- **Organização intuitiva**: Arraste e solte (Drag & drop), seleção múltipla
+- **Organização intuitiva**: Seleção múltipla
 - **Exportação flexível**: PDF único, PDFs separados (em arquivo ZIP), ou imagens PNG separadas (em arquivo ZIP)
 - **Interface moderna**: Temas claro e escuro
 - **Atalhos de teclado**: Navegação e operações rápidas
@@ -116,6 +116,9 @@ No `package.json`, seção `build`:
 
 ## Licença
 Este projeto está licenciado sob a licença MIT.
+
+## Inspiração para o projeto
+https://github.com/pdfarranger
 
 ## Autor
 **Maico Trein Müller**
